@@ -4,8 +4,7 @@ create table users (
   id serial primary key,
   name varchar,
   email varchar,
-  password varchar,
-  created_at timestamp
+  password varchar
 );
 
 create table user_data (

@@ -11,7 +11,7 @@ function all() {
 }
 
 function single(date) {
-  let sql = 'select * from user_data where date(date) = $1;'
+  let sql = 'select * from user_data where date(date) = $1 order by id desc;'
 
   return db.query(sql, [date])
 }
