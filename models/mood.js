@@ -4,22 +4,22 @@ const db = new Pool({
   database: 'moodtracker'
 })
 
-function all() {
-  let sql = 'select * from user_data;'
+function all(userId) {
+  let sql = 'select * from user_data where user_id = $1;'
 
-  return db.query(sql)
+  return db.query(sql, [userId])
 }
 
-function single(date) {
-  let sql = 'select * from user_data where date(date) = $1 order by id desc;'
+function single(date, userId) {
+  let sql = 'select * from user_data where date(date) = $1 and user_id = $2 order by id desc limit 1;'
 
-  return db.query(sql, [date])
+  return db.query(sql, [date, userId])
 }
 
-function create(mood, habits, comment, date) {
-  let sql = 'insert into user_data (mood, habits, comment, date) values ($1, $2, $3, $4) returning *;'
+function create(userId, mood, habits, comment, date) {
+  let sql = 'insert into user_data (user_id, mood, habits, comment, date) values ($1, $2, $3, $4, $5) returning *;'
 
-  return db.query(sql, [mood, habits, comment, date])
+  return db.query(sql, [userId, mood, habits, comment, date])
 }
 
 module.exports = {
