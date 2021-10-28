@@ -87,7 +87,9 @@ app.post('/sign-up', (req, res) => {
 
 })
 
-app.delete('/api/logout')
+app.delete('/api/logout', (req, res) => {
+  req.session.destroy()
+})
 
 app.get('/api/moods/:id', (req, res) => {
   
