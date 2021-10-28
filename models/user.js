@@ -8,7 +8,7 @@ const db = new Pool({
 let hashedPassword = ''
 
 function create(name, email, hashedPassword) {
-  let sql = 'insert into users (name, email, password) values ($1, $2, $3);'
+  let sql = 'insert into users (name, email, password) values ($1, $2, $3) returning *;'
 
   return db.query(sql, [name, email, hashedPassword])
 }
@@ -36,20 +36,6 @@ function findByEmail(email) {
 
   return db.query(sql, [email])
 }
-
-//RUBY VERSION BELOW
-// def find_user_by_id(id)
-
-//     sql = "SELECT * FROM users WHERE id = $1;"
-
-//     result = run_sql(sql, [id])
-
-//     if result.count > 0
-//         return result[0]
-//     else
-//         return false
-//     end
-// end
 
 module.exports = {
   create,

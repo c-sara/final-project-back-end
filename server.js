@@ -31,8 +31,8 @@ app.get('/api/logged-in', (req, res) => {
 
 app.post('/login', (req, res) => {
 
-  let email = req.body.userEmail
-  let password = req.body.userPassword
+  let email = req.body.userEmail || req.body.email
+  let password = req.body.userPassword || req.body.password
   let userId = ''
   let userName = ''
 
@@ -78,25 +78,21 @@ app.post('/sign-up', (req, res) => {
     
     return User.create(name, email, hashedPassword)
   })
-  .then(res => {
-    console.log('new user added')
+  .then(userData => {
+    // console.log(userData)
+    let userId = userData.rows[0].id
+    let userName = userData.rows[0].name
+    req.session.userId = userId
+
+    res.json({isLoggedIn: true, userId, userName})
   })
   .catch(err => {
     console.log(err)
   })
 
-  //salt password
-  // const hashedPassword = User.encryptPassword(req.body.password)
-
-  // User.create(req.body.name, req.body.email, hashedPassword)
-  //   .then(dbRes => {
-  //     res.status(201).json({ message: 'new user added', item: dbRes.rows[0] })
-  //     })
-  //     .catch(err => {
-  //     res.status(500).json({ message: 'something went wrong. try again' })
-  //     })
-
 })
+
+app.delete('/api/logout')
 
 app.get('/api/moods/:id', (req, res) => {
   

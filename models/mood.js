@@ -5,13 +5,13 @@ const db = new Pool({
 })
 
 function all(userId) {
-  let sql = 'select * from user_data where user_id = $1;'
+  let sql = 'select distinct on (date::date) id, user_id, mood, habits, comment, date from user_data where user_id = $1;'
 
   return db.query(sql, [userId])
 }
 
 function single(date, userId) {
-  let sql = 'select * from user_data where date(date) = $1 and user_id = $2 order by id desc limit 1;'
+  let sql = 'select * from user_data where date(date) = $1 and user_id = $2 order by id desc;'
 
   return db.query(sql, [date, userId])
 }
