@@ -1,17 +1,12 @@
 const express = require('express')
 const app = express()
-const port = 8080
+const port = process.env.PORT || 8080;
 
 const bcrypt = require('bcrypt')
 var session = require('express-session')
 
 const Mood = require('./models/mood.js')
 const User = require('./models/user.js')
-
-const { Pool } = require('pg')
-const pool = new Pool({
-  database: 'moodtracker'
-})
 
 app.use(express.json())
 
@@ -131,7 +126,15 @@ app.post('/api/moods', (req, res) => {
 
 })
 
-
 app.listen(port, () => {
   console.log(`server listening on port ${port}.`)
 })
+
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path')
+  app.use(express.static(path.join(__dirname, 'build')));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
+}

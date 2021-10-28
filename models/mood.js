@@ -1,8 +1,16 @@
-const { Pool } = require('pg')
-
-const db = new Pool({
-  database: 'moodtracker'
-})
+let db;
+if (process.env.NODE_ENV === 'production') {
+  db = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  })
+} else {
+  db = new Pool({
+    database: 'moodtracker'
+  })
+}
 
 function all(userId) {
   let sql = 'select distinct on (date::date) id, user_id, mood, habits, comment, date from user_data where user_id = $1;'
